@@ -51,7 +51,8 @@ def main() -> int:
                 if not line.strip():
                     continue
                 item = json.loads(line)
-                if item.get("code", 0) != 0:
+                # 20000000 is the documented successful stream-completion frame.
+                if item.get("code", 0) not in (0, 20000000):
                     raise RuntimeError(
                         f"Speech API error {item.get('code')}: {item.get('message', 'unknown')}"
                     )
