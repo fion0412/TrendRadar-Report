@@ -1,0 +1,37 @@
+name: Yunzhou 2.0 Voice MP3
+
+on:
+  workflow_dispatch:
+    inputs:
+      text:
+        description: '要转换为语音的文字（最多 1000 字符）'
+        required: true
+        type: string
+        default: '大家好，我是文颖老师。欢迎来到我的 AI 课程。'
+
+permissions:
+  contents: read
+
+jobs:
+  synthesize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate MP3
+        env:
+          VOLCENGINE_TTS_API_KEY: ${{ secrets.VOLCENGINE_TTS_API_KEY }}
+          TTS_TEXT: ${{ inputs.text }}
+        run: python scripts/yunzhou_tts.py
+      - name: Downloadable MP3
+        uses: actions/upload-artifact@v4
+        with:
+          name: yunzhou2-mp3
+          path: output/tts/yunzhou2.mp3
+          if-no-files-found: error
+          retention-days: 7
