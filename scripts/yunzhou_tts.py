@@ -11,7 +11,7 @@ from urllib.request import Request, urlopen
 
 
 ENDPOINT = "https://openspeech.bytedance.com/api/v3/tts/unidirectional"
-VOICE = "zh_male_m191_uranus_bigtts"
+VOICE = "zh_female_qingxinnvsheng_uranus_bigtts"
 
 
 def main() -> int:
