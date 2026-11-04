@@ -11,7 +11,8 @@ from urllib.request import Request, urlopen
 
 
 ENDPOINT = "https://openspeech.bytedance.com/api/v3/tts/unidirectional"
-VOICE = "zh_female_qingxinnvsheng_uranus_bigtts"
+VOICE = os.environ.get("TTS_VOICE_ID", "S_LRqhALib2").strip()
+RESOURCE_ID = "seed-icl-2.0" if VOICE.startswith("S_") else "seed-tts-2.0"
 
 
 def main() -> int:
@@ -29,6 +30,7 @@ def main() -> int:
         "req_params": {
             "text": message,
             "speaker": VOICE,
+            **({"model": "seed-tts-2.0-standard"} if VOICE.startswith("S_") else {}),
             "audio_params": {"format": "mp3", "sample_rate": 24000},
         }
     }
@@ -37,7 +39,7 @@ def main() -> int:
         data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
         headers={
             "X-Api-Key": key,
-            "X-Api-Resource-Id": "seed-tts-2.0",
+            "X-Api-Resource-Id": RESOURCE_ID,
             "X-Api-Request-Id": str(uuid.uuid4()),
             "Content-Type": "application/json",
         },
