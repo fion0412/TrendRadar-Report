@@ -169,6 +169,17 @@ jobs:
           GITHUB_ACTIONS: true
         run: uv run python -m trendradar
 
+      - name: Upload news report
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trendradar-news-report
+          path: |
+            index.html
+            output/html/
+          if-no-files-found: error
+          retention-days: 7
+
       # --------------------------------------------------------------------------------
       # ☁️ CLOUDFLARE PAGES DEPLOY / 部署到 Cloudflare Pages（可选）
       # --------------------------------------------------------------------------------
